@@ -1,15 +1,19 @@
-name: Build My APK
+name: Build APK from Zip
 
 on:
   push:
-    branches: [ main ] # سيشتغل المصنع بمجرد الضغط على حفظ
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
+      # خطوة فك الضغط (تأكد أن اسم الملف project.zip)
+      - name: Unzip project
+        run: unzip project.zip
+
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -21,7 +25,7 @@ jobs:
         with:
           channel: 'stable'
           
-      - name: Get Dependencies
+      - name: Install dependencies
         run: flutter pub get
         
       - name: Build APK
@@ -30,5 +34,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
-          name: MyCalculator-APK
+          name: My-Final-App
           path: build/app/outputs/flutter-apk/app-release.apk
