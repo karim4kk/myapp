@@ -10,10 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # خطوة فك الضغط (تأكد أن اسم الملف project.zip)
-      - name: Unzip project
-        run: unzip project.zip
-
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -24,7 +20,13 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          
+
+      - name: Unzip and Move Files
+        run: |
+          unzip *.zip
+          # هذا السطر ينقل الملفات للمكان الصحيح إذا كانت داخل مجلد فرعي
+          find . -maxdepth 2 -name "pubspec.yaml" -execdir cp -r . ../ \; || true
+
       - name: Install dependencies
         run: flutter pub get
         
